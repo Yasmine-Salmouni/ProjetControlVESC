@@ -1,0 +1,19 @@
+../Core/Src/main.cpp:90:5:int main()	8	static
+../Core/Src/main.cpp:178:6:void SystemClock_Config()	88	static
+../Core/Src/main.cpp:224:13:void MX_I2C1_Init()	8	static
+../Core/Src/main.cpp:258:13:void MX_SPI1_Init()	8	static
+../Core/Src/main.cpp:296:13:void MX_USART2_UART_Init()	8	static
+../Core/Src/main.cpp:329:13:void MX_USART3_UART_Init()	8	static
+../Core/Src/main.cpp:362:13:void MX_GPIO_Init()	56	static
+../Core/Src/main.cpp:510:6:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)	16	static
+../Core/Src/main.cpp:528:6:void Error_Handler()	4	static,ignoring_inline_asm
+../Core/Src/main.cpp:558:9:int _write(int, char*, int)	24	static
+../Core/Src/main.cpp:563:9:int _close(int)	16	static
+../Core/Src/main.cpp:564:9:int _fstat(int, void*)	16	static
+../Core/Src/main.cpp:565:9:int _isatty(int)	16	static
+../Core/Src/main.cpp:566:9:int _lseek(int, int, int)	24	static
+../Core/Src/main.cpp:567:9:int _read(int, char*, int)	24	static
+../Core/Src/main.cpp:568:9:int _kill(int, int)	16	static
+../Core/Src/main.cpp:569:9:int _getpid()	4	static
+../Core/Src/main.cpp:570:1:void __static_initialization_and_destruction_0()	8	static
+../Core/Src/main.cpp:570:1:cpp)	8	static

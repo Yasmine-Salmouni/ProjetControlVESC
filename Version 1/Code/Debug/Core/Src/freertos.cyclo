@@ -1,0 +1,4 @@
+../Core/Src/freertos.cpp:83:6:void StartTaskUpdateS(void*)	1
+../Core/Src/freertos.cpp:93:6:void StartTaskUpdatefromS(void*)	1
+../Core/Src/freertos.cpp:102:6:void StartTaskLinearControl(void*)	2
+../Core/Src/freertos.cpp:124:6:void MX_FREERTOS_Init()	1

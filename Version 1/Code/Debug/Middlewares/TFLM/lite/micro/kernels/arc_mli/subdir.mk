@@ -1,0 +1,54 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+# Toolchain: GNU Tools for STM32 (13.3.rel1)
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+CC_SRCS += \
+../Middlewares/TFLM/lite/micro/kernels/arc_mli/add.cc \
+../Middlewares/TFLM/lite/micro/kernels/arc_mli/conv.cc \
+../Middlewares/TFLM/lite/micro/kernels/arc_mli/depthwise_conv.cc \
+../Middlewares/TFLM/lite/micro/kernels/arc_mli/fully_connected.cc \
+../Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface.cc \
+../Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface_mli_20.cc \
+../Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_slicers.cc \
+../Middlewares/TFLM/lite/micro/kernels/arc_mli/pooling.cc \
+../Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buf_mgr.cc \
+../Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buffers.cc 
+
+CC_DEPS += \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/add.d \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/conv.d \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/depthwise_conv.d \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/fully_connected.d \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface.d \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface_mli_20.d \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_slicers.d \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/pooling.d \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buf_mgr.d \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buffers.d 
+
+OBJS += \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/add.o \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/conv.o \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/depthwise_conv.o \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/fully_connected.o \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface.o \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface_mli_20.o \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_slicers.o \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/pooling.o \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buf_mgr.o \
+./Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buffers.o 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+Middlewares/TFLM/lite/micro/kernels/arc_mli/%.o Middlewares/TFLM/lite/micro/kernels/arc_mli/%.su Middlewares/TFLM/lite/micro/kernels/arc_mli/%.cyclo: ../Middlewares/TFLM/lite/micro/kernels/arc_mli/%.cc Middlewares/TFLM/lite/micro/kernels/arc_mli/subdir.mk
+	arm-none-eabi-g++ "$<" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -std=c++14 -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
+
+clean: clean-Middlewares-2f-TFLM-2f-lite-2f-micro-2f-kernels-2f-arc_mli
+
+clean-Middlewares-2f-TFLM-2f-lite-2f-micro-2f-kernels-2f-arc_mli:
+	-$(RM) ./Middlewares/TFLM/lite/micro/kernels/arc_mli/add.cyclo ./Middlewares/TFLM/lite/micro/kernels/arc_mli/add.d ./Middlewares/TFLM/lite/micro/kernels/arc_mli/add.o ./Middlewares/TFLM/lite/micro/kernels/arc_mli/add.su ./Middlewares/TFLM/lite/micro/kernels/arc_mli/conv.cyclo ./Middlewares/TFLM/lite/micro/kernels/arc_mli/conv.d ./Middlewares/TFLM/lite/micro/kernels/arc_mli/conv.o ./Middlewares/TFLM/lite/micro/kernels/arc_mli/conv.su ./Middlewares/TFLM/lite/micro/kernels/arc_mli/depthwise_conv.cyclo ./Middlewares/TFLM/lite/micro/kernels/arc_mli/depthwise_conv.d ./Middlewares/TFLM/lite/micro/kernels/arc_mli/depthwise_conv.o ./Middlewares/TFLM/lite/micro/kernels/arc_mli/depthwise_conv.su ./Middlewares/TFLM/lite/micro/kernels/arc_mli/fully_connected.cyclo ./Middlewares/TFLM/lite/micro/kernels/arc_mli/fully_connected.d ./Middlewares/TFLM/lite/micro/kernels/arc_mli/fully_connected.o ./Middlewares/TFLM/lite/micro/kernels/arc_mli/fully_connected.su ./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface.cyclo ./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface.d ./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface.o ./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface.su ./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface_mli_20.cyclo ./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface_mli_20.d ./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface_mli_20.o ./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_interface_mli_20.su ./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_slicers.cyclo ./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_slicers.d ./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_slicers.o ./Middlewares/TFLM/lite/micro/kernels/arc_mli/mli_slicers.su ./Middlewares/TFLM/lite/micro/kernels/arc_mli/pooling.cyclo ./Middlewares/TFLM/lite/micro/kernels/arc_mli/pooling.d ./Middlewares/TFLM/lite/micro/kernels/arc_mli/pooling.o ./Middlewares/TFLM/lite/micro/kernels/arc_mli/pooling.su ./Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buf_mgr.cyclo ./Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buf_mgr.d ./Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buf_mgr.o ./Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buf_mgr.su ./Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buffers.cyclo ./Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buffers.d ./Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buffers.o ./Middlewares/TFLM/lite/micro/kernels/arc_mli/scratch_buffers.su
+
+.PHONY: clean-Middlewares-2f-TFLM-2f-lite-2f-micro-2f-kernels-2f-arc_mli
+

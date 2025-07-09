@@ -1,0 +1,27 @@
+../Core/Src/ScreenDisplay.cpp:12:2:ScreenDisplay::ScreenDisplay(UART_HandleTypeDef*)	16	static
+../Core/Src/ScreenDisplay.cpp:14:7:void ScreenDisplay::sendCommand(const char*)	32	static
+../Core/Src/ScreenDisplay.cpp:20:7:void ScreenDisplay::sendText(const char*, const char*)	96	static
+../Core/Src/ScreenDisplay.cpp:26:7:void ScreenDisplay::sendValue(const char*, float, const char*)	128	static
+../Core/Src/ScreenDisplay.cpp:40:7:void ScreenDisplay::showCadence(float)	16	static
+../Core/Src/ScreenDisplay.cpp:61:7:void ScreenDisplay::showTorque(float)	16	static
+../Core/Src/ScreenDisplay.cpp:74:7:void ScreenDisplay::showPower(float)	16	static
+../Core/Src/ScreenDisplay.cpp:86:6:void ScreenDisplay::showAll(float, float, float)	80	static
+../Core/Src/ScreenDisplay.cpp:103:7:void ScreenDisplay::showMode(ControlMode)	24	static
+../Core/Src/ScreenDisplay.cpp:118:7:void ScreenDisplay::showGain(float)	16	static
+../Core/Src/ScreenDisplay.cpp:122:7:void ScreenDisplay::showError(const char*)	16	static
+../Core/Src/ScreenDisplay.cpp:126:7:void ScreenDisplay::showWelcome()	16	static
+../Core/Src/ScreenDisplay.cpp:130:7:void ScreenDisplay::clearScreen()	16	static
+../Core/Src/ScreenDisplay.cpp:134:10:int32_t ScreenDisplay::readInt32()	32	static
+../Core/Src/ScreenDisplay.cpp:161:10:uint8_t ScreenDisplay::readByte()	16	static
+../Core/Src/ScreenDisplay.cpp:170:8:float ScreenDisplay::getUserCadence()	80	static
+../Core/Src/ScreenDisplay.cpp:225:8:float ScreenDisplay::getUserPower()	64	static
+../Core/Src/ScreenDisplay.cpp:270:8:float ScreenDisplay::getUserTorque()	64	static
+../Core/Src/ScreenDisplay.cpp:309:13:ControlMode ScreenDisplay::getMode()	24	static
+../Core/Src/ScreenDisplay.cpp:330:7:float ScreenDisplay::getUserLinearGain()	64	static
+../Core/Src/ScreenDisplay.cpp:369:6:void ScreenDisplay::showDutyCycle(float)	24	static
+../Core/Src/ScreenDisplay.cpp:377:6:void ScreenDisplay::showDirection(DirectionMode)	16	static
+../Core/Src/ScreenDisplay.cpp:381:6:bool ScreenDisplay::getStop()	64	static
+../Core/Src/ScreenDisplay.cpp:444:15:DirectionMode ScreenDisplay::getDirection()	24	static
+../Core/Src/ScreenDisplay.cpp:450:7:float ScreenDisplay::getRampRate()	24	static
+../Core/Src/ScreenDisplay.cpp:458:6:bool ScreenDisplay::getCalibrateRequest()	24	static
+../Core/Src/ScreenDisplay.cpp:464:6:void ScreenDisplay::showCalibrationStatus(bool)	16	static
