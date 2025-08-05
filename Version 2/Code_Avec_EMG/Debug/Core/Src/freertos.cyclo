@@ -1,0 +1,3 @@
+../Core/Src/freertos.cpp:142:6:void StartTaskUART_RX_EMG(void*)	20
+../Core/Src/freertos.cpp:258:6:void StartTaskProcessEMG(void*)	29
+../Core/Src/freertos.cpp:459:6:void MX_FREERTOS_Init()	3

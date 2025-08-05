@@ -43,7 +43,8 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- ../USB_HOST/App/usb_host.h ../Core/Src/../Inc/MotorController.hpp \
+ ../USB_HOST/App/usb_host.h ../Core/Src/../Inc/ScreenDisplay.hpp \
+ ../Core/Src/../Inc/MotorController.hpp \
  ../Core/Src/../Inc/MotorComputations.hpp ../Core/Src/../Inc/globals.hpp
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -91,6 +92,7 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 ../USB_HOST/App/usb_host.h:
+../Core/Src/../Inc/ScreenDisplay.hpp:
 ../Core/Src/../Inc/MotorController.hpp:
 ../Core/Src/../Inc/MotorComputations.hpp:
 ../Core/Src/../Inc/globals.hpp:

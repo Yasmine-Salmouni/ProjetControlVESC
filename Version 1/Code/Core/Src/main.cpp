@@ -23,6 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "../Inc/ScreenDisplay.hpp"
 #include "../Inc/MotorController.hpp"
 #include "../Inc/globals.hpp"
 /* USER CODE END Includes */
@@ -50,7 +51,7 @@ SPI_HandleTypeDef hspi1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
 
-MotorController motorController(&huart3, &huart2, 0.0044f);
+MotorController motorController(&huart3, &huart2, 0.0039f);
 
 /* Definitions for defaultTask */
 
@@ -165,7 +166,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	 
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -304,7 +305,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 9600;
+  huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;

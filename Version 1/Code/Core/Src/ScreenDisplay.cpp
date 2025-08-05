@@ -8,6 +8,8 @@
 
  #include "../Inc/ScreenDisplay.hpp"
  #include "../Inc/MotorController.hpp"
+ #include "../Inc/globals.hpp"
+ #include <cmath>
 
  ScreenDisplay::ScreenDisplay(UART_HandleTypeDef* EcranUart) : ecran_uart(EcranUart) {}
 
@@ -35,10 +37,17 @@
      sendCommand(buffer);
  }
 
+ // Fonction privée pour nettoyer le buffer UART
+ void ScreenDisplay::clearUartBuffer() {
+     while (USART2->SR & USART_SR_RXNE) {
+         volatile uint8_t dummy = USART2->DR;
+     }
+ }
+
  // --- Fonctions spécifiques de haut niveau ---
 
  void ScreenDisplay::showCadence(float rpm) {
-     sendValue("cad_val", rpm, "%.1f");
+     sendValue("cad_val", rpm, "%.4f");
  }
 
  //Pour le graphe
@@ -59,8 +68,8 @@
 
 
  void ScreenDisplay::showTorque(float torque) {
-     sendValue("tor_val", torque, "%.4f");
- }
+      sendValue("tor_val", torque, "%.4f");
+  }
 
  //Pour le graphe
 
@@ -72,7 +81,7 @@
 
 
  void ScreenDisplay::showPower(float power) {
-     sendValue("pow_val", power, "%.1f");
+     sendValue("pow_val", power, "%.4f");
  }
 
 //Pour le graphe
@@ -168,6 +177,8 @@ void ScreenDisplay::showAll(float rpm, float torque, float power) {
 
 
  float ScreenDisplay::getUserCadence() {
+     clearUartBuffer();
+     
      sendCommand("get cad.txt");  // Envoie la commande à l'écran Nextion
 
      // Attente de la réponse : format = 0x70 + "texte" + 0xFF 0xFF 0xFF
@@ -200,7 +211,7 @@ void ScreenDisplay::showAll(float rpm, float torque, float power) {
              endCount++;
              if (endCount == 3) {
                  buffer[index] = '\0';
-                 return atof(buffer);  // Conversion réussie
+                 break;
              }
          } else {
              if (index < sizeof(buffer) - 1) {
@@ -210,8 +221,20 @@ void ScreenDisplay::showAll(float rpm, float torque, float power) {
          }
      }
 
-     // Timeout ou erreur
-     return -1.0f;  // Valeur d'erreur
+     // Vérification si on a reçu une réponse valide
+     if (!headerFound || index == 0) {
+         // Le champ cad.txt n'existe pas sur cette page ou pas de réponse
+         return 0.0f;  // Retourner 0 quand le champ n'est pas disponible
+     }
+     
+     float value = atof(buffer);
+     
+     // Vérification que la valeur est valide (pas NaN ou infini)
+     if (isnan(value) || isinf(value)) {
+         return 0.0f;
+     }
+     
+     return value;  // Conversion réussie
  }
 
 
@@ -223,123 +246,22 @@ void ScreenDisplay::showAll(float rpm, float torque, float power) {
 }*/
 
  float ScreenDisplay::getUserPower() {
-     sendCommand("get pow.txt");  // Demande à l'écran Nextion la valeur texte de pow
-
-     const uint8_t RESPONSE_HEADER = 0x70;
-     const uint8_t END_BYTE = 0xFF;
-
-     char buffer[32] = {0};
-     int index = 0;
-     bool headerFound = false;
-     int endCount = 0;
-
-     while (true) {
-         uint8_t byte = readByte();  // Fonction bloquante UART
-
-         if (!headerFound) {
-             if (byte == RESPONSE_HEADER) {
-                 headerFound = true;
-             }
-             continue;
-         }
-
-         if (byte == END_BYTE) {
-             endCount++;
-             if (endCount == 3) {
-                 buffer[index] = '\0';
-                 break;
-             }
-         } else {
-             if (index < sizeof(buffer) - 1) {
-                 buffer[index++] = byte;
-             }
-             endCount = 0;
-         }
-     }
-
-     return atof(buffer);  // Conversion vers float (watts)
- }
-
-
-/*float ScreenDisplay::getUserTorque() {
-    sendCommand("get tor.val");  // tor : champ de couple
-    int32_t value = readInt32();
-    return static_cast<float>(value);  // en Nm
-}*/
-
- float ScreenDisplay::getUserTorque() {
-     sendCommand("get tor.txt");  // Demande la valeur du champ texte "tor"
-
-     const uint8_t RESPONSE_HEADER = 0x70;
-     const uint8_t END_BYTE = 0xFF;
-
-     char buffer[32] = {0};
-     int index = 0;
-     bool headerFound = false;
-     int endCount = 0;
-
-     while (true) {
-         uint8_t byte = readByte();  // Fonction bloquante de lecture UART
-
-         if (!headerFound) {
-             if (byte == RESPONSE_HEADER) {
-                 headerFound = true;
-             }
-             continue;
-         }
-
-         if (byte == END_BYTE) {
-             endCount++;
-             if (endCount == 3) {
-                 buffer[index] = '\0';  // Fin de la chaîne reçue
-                 break;
-             }
-         } else {
-             if (index < sizeof(buffer) - 1) {
-                 buffer[index++] = byte;
-             }
-             endCount = 0;
-         }
-     }
-
-     return atof(buffer);  // Convertit la chaîne en float (Nm)
- }
-
-
-ControlMode ScreenDisplay::getMode() {
-    sendCommand("get mode.val");  // Lire la valeur du composant 'mode'
-    int32_t value = readInt32();
-
-    switch (value) {
-        case 0: return ControlMode::CADENCE;
-        case 1: return ControlMode::TORQUE;
-        case 2: return ControlMode::POWER_CONCENTRIC;
-        case 3: return ControlMode::POWER_ECCENTRIC;
-        case 4: return ControlMode::LINEAR;
-        default: return ControlMode::CADENCE;  // valeur par défaut si erreur
-    }
-}
-
-/*float ScreenDisplay::getUserLinearGain() {
-    sendCommand("get gain.val");  // Demande à l'écran la valeur du champ gain
-    int32_t value = readInt32();  // Lit la réponse binaire (format Nextion)
-
-    return static_cast<float>(value) / 100.0f;  // Conversionenfloat
-}*/
-
-float ScreenDisplay::getUserLinearGain() {
-    sendCommand("get gain.txt");  // Demande la valeur texte du champ gain
+    clearUartBuffer();
+    sendCommand("get pow.txt");  // Demande la valeur du champ texte "pow"
 
     const uint8_t RESPONSE_HEADER = 0x70;
     const uint8_t END_BYTE = 0xFF;
-
     char buffer[32] = {0};
     int index = 0;
     bool headerFound = false;
     int endCount = 0;
+    uint32_t startTime = HAL_GetTick();
 
-    while (true) {
-        uint8_t byte = readByte();  // Lecture UART bloquante
+    while (HAL_GetTick() - startTime < 100) {
+        if (!(USART2->SR & USART_SR_RXNE)) {
+            continue;
+        }
+        uint8_t byte = static_cast<uint8_t>(USART2->DR & 0xFF);
 
         if (!headerFound) {
             if (byte == RESPONSE_HEADER) {
@@ -361,8 +283,207 @@ float ScreenDisplay::getUserLinearGain() {
             endCount = 0;
         }
     }
+    
+    // Vérification si on a reçu une réponse valide
+    if (!headerFound || index == 0) {
+        // Le champ pow.txt n'existe pas sur cette page ou pas de réponse
+        return 0.0f;  // Retourner 0 quand le champ n'est pas disponible
+    }
+    
+    float value = atof(buffer);
+    
+    // Vérification que la valeur est valide (pas NaN ou infini)
+    if (isnan(value) || isinf(value)) {
+        return 0.0f;
+    }
+    
+    return value;  // Convertit la chaîne en float (W)
+}
 
-    return atof(buffer) / 100.0f;  // Conversion en float et mise à l'échelle
+
+/*float ScreenDisplay::getUserTorque() {
+    sendCommand("get tor.val");  // tor : champ de couple
+    int32_t value = readInt32();
+    return static_cast<float>(value);  // en Nm
+}*/
+
+ float ScreenDisplay::getUserTorque() {
+     clearUartBuffer();
+     
+     sendCommand("get tor.txt");  // Demande la valeur du champ texte "tor"
+
+     const uint8_t RESPONSE_HEADER = 0x70;
+     const uint8_t END_BYTE = 0xFF;
+     char buffer[32] = {0};
+     int index = 0;
+     bool headerFound = false;
+     int endCount = 0;
+     uint32_t startTime = HAL_GetTick();
+
+     while (HAL_GetTick() - startTime < 50) {  // Augmentation du timeout à 50ms
+         if (!(USART2->SR & USART_SR_RXNE)) {
+             continue;
+         }
+         uint8_t byte = static_cast<uint8_t>(USART2->DR & 0xFF);
+
+         if (!headerFound) {
+             if (byte == RESPONSE_HEADER) {
+                 headerFound = true;
+             }
+             continue;
+         }
+
+         if (byte == END_BYTE) {
+             endCount++;
+             if (endCount == 3) {
+                 buffer[index] = '\0';
+                 break;
+             }
+         } else {
+             if (index < sizeof(buffer) - 1) {
+                 buffer[index++] = byte;
+             }
+             endCount = 0;
+         }
+     }
+     
+                                       // Vérification si on a reçu une réponse valide
+      if (!headerFound || index == 0) {
+          // Le champ tor.txt n'existe pas sur cette page ou pas de réponse
+          return 0.0f;  // Retourner 0 quand le champ n'est pas disponible
+      }
+    
+    float value = atof(buffer);
+    
+    // Vérification que la valeur est valide (pas NaN ou infini)
+    if (isnan(value) || isinf(value)) {
+        return 0.0f;
+    }
+     
+     return value;  // Convertit la chaîne en float (Nm)
+ }
+
+ /*int32_t ScreenDisplay::getComboBoxValue(const char* objname) {
+     char cmd[32];
+     snprintf(cmd, sizeof(cmd), "get %s.val", objname);
+     sendCommand(cmd);  // N'oublie pas d'ajouter les 3 x 0xFF dans sendCommand !
+
+     const uint8_t RESPONSE_HEADER = 0x71;
+     const uint8_t END_BYTE = 0xFF;
+
+     int32_t value = -1;
+     bool headerFound = false;
+     uint8_t valBuf[4] = {0};
+     int valIdx = 0;
+     int endCount = 0;
+
+     while (true) {
+         uint8_t byte = readByte();
+
+         if (!headerFound) {
+             if (byte == RESPONSE_HEADER) {
+                 headerFound = true;
+             }
+             continue;
+         }
+
+         // Lecture des 4 octets de valeur (little endian)
+         if (valIdx < 4) {
+             valBuf[valIdx++] = byte;
+             if (valIdx == 4) {
+                 // Assembler la valeur
+                 value = valBuf[0] | (valBuf[1] << 8) | (valBuf[2] << 16) | (valBuf[3] << 24);
+             }
+             continue;
+         }
+
+         // Gérer la séquence de fin
+         if (byte == END_BYTE) {
+             endCount++;
+             if (endCount == 3) break;
+         } else {
+             endCount = 0;
+         }
+     }
+
+     return value;
+ }*/
+
+ /*ControlMode ScreenDisplay::getMode() {
+     sendCommand("get mode.val");  // Lire la valeur du composant 'mode'
+     int32_t value = readInt32();
+
+     switch (value) {
+         case 0: return ControlMode::CADENCE;
+         case 1: return ControlMode::TORQUE;
+         case 2: return ControlMode::POWER_CONCENTRIC;
+         case 3: return ControlMode::POWER_ECCENTRIC;
+         case 4: return ControlMode::LINEAR;
+         default: return ControlMode::CADENCE;  // valeur par défaut si erreur
+     }
+ }*/
+
+/*float ScreenDisplay::getUserLinearGain() {
+    sendCommand("get gain.val");  // Demande à l'écran la valeur du champ gain
+    int32_t value = readInt32();  // Lit la réponse binaire (format Nextion)
+
+    return static_cast<float>(value) / 100.0f;  // Conversionenfloat
+}*/
+
+float ScreenDisplay::getUserLinearGain() {
+    clearUartBuffer();
+    
+    sendCommand("get gain.txt");  // Demande la valeur texte du champ gain
+
+    const uint8_t RESPONSE_HEADER = 0x70;
+    const uint8_t END_BYTE = 0xFF;
+    char buffer[32] = {0};
+    int index = 0;
+    bool headerFound = false;
+    int endCount = 0;
+    uint32_t startTime = HAL_GetTick();
+
+    while (HAL_GetTick() - startTime < 50) {  // Augmentation du timeout à 50ms
+        if (!(USART2->SR & USART_SR_RXNE)) {
+            continue;
+        }
+        uint8_t byte = static_cast<uint8_t>(USART2->DR & 0xFF);
+
+        if (!headerFound) {
+            if (byte == RESPONSE_HEADER) {
+                headerFound = true;
+            }
+            continue;
+        }
+
+        if (byte == END_BYTE) {
+            endCount++;
+            if (endCount == 3) {
+                buffer[index] = '\0';
+                break;
+            }
+        } else {
+            if (index < sizeof(buffer) - 1) {
+                buffer[index++] = byte;
+            }
+            endCount = 0;
+        }
+    }
+    
+    // Vérification si on a reçu une réponse valide
+    if (!headerFound || index == 0) {
+        // Le champ gain.txt n'existe pas sur cette page ou pas de réponse
+        return 0.0f;  // Retourner 0 au lieu de -1 quand le champ n'est pas disponible
+    }
+    
+    float value = atof(buffer);
+    
+    // Vérification que la valeur est valide (pas NaN ou infini)
+    if (isnan(value) || isinf(value)) {
+        return 0.0f;
+    }
+    
+    return value / 100.0f;  // Conversion en float et mise à l'échelle
 }
 
 
@@ -440,12 +561,143 @@ bool ScreenDisplay::getStop() {
     return stopState;  // En cas d'erreur, on garde l'état actuel
 }
 
-//tester si ça marche
-DirectionMode ScreenDisplay::getDirection() {
-    sendCommand("get dir.val");     // dir
-    int32_t value = readInt32();    // Lecture 0 ou 1
-    return (value == 1) ? DirectionMode::REVERSE : DirectionMode::FORWARD;
+
+
+ControlMode ScreenDisplay::getMode() {
+    clearUartBuffer();
+
+    sendCommand("get mode.val");
+    // HAL_Delay(2); // Suppression du délai
+
+    const int MAX_RESPONSE = 8;
+    uint8_t response[MAX_RESPONSE] = {0};
+    int octetCount = 0;
+    uint32_t startTime = HAL_GetTick();
+    bool headerFound = false;
+    static uint8_t lastGoodFrame[MAX_RESPONSE] = {0};
+    static bool hasGoodFrame = false;
+    static int32_t lastModeValue = -999999; // valeur impossible pour forcer la première mise à jour
+    int32_t currentModeValue = -1;
+
+    // 1. Attendre le header 0x71 (timeout réduit)
+    while ((HAL_GetTick() - startTime < 50) && !headerFound) {
+        if (USART2->SR & USART_SR_RXNE) {
+            uint8_t byte = static_cast<uint8_t>(USART2->DR & 0xFF);
+            if (byte == 0x71) {
+                response[octetCount++] = byte;
+                headerFound = true;
+            }
+        }
+    }
+
+    // 2. Lire les 7 octets suivants (timeout réduit)
+    uint32_t dataStart = HAL_GetTick();
+    while (headerFound && (octetCount < MAX_RESPONSE) && (HAL_GetTick() - dataStart < 20)) {
+        if (USART2->SR & USART_SR_RXNE) {
+            response[octetCount++] = static_cast<uint8_t>(USART2->DR & 0xFF);
+        }
+    }
+
+    // 3. Affichage de la dernière trame complète reçue
+    if (octetCount == MAX_RESPONSE) {
+        // Nouvelle trame complète reçue : on la mémorise
+        memcpy(lastGoodFrame, response, MAX_RESPONSE);
+        hasGoodFrame = true;
+        // Extraction de la valeur du mode
+        currentModeValue = response[1] | (response[2] << 8) | (response[3] << 16) | (response[4] << 24);
+        lastModeValue = currentModeValue;
+
+        // Met à jour last_valid_mode ici UNIQUEMENT
+        switch (lastModeValue) {
+            case 0: last_valid_mode = ControlMode::CADENCE; break;
+            case 1: last_valid_mode = ControlMode::TORQUE; break;
+            case 2: last_valid_mode = ControlMode::POWER_CONCENTRIC; break;
+            case 3: last_valid_mode = ControlMode::POWER_ECCENTRIC; break;
+            case 4: last_valid_mode = ControlMode::CADENCE; break;
+            default: last_valid_mode = ControlMode::CADENCE; break;
+        }
+    } else if (hasGoodFrame) {
+        // Si pas de nouvelle trame, on garde la dernière valeur
+        currentModeValue = lastGoodFrame[1] | (lastGoodFrame[2] << 8) | (lastGoodFrame[3] << 16) | (lastGoodFrame[4] << 24);
+        // last_valid_mode n'est PAS modifié ici
+    }
+    /*if (hasGoodFrame) {
+        const char* modeName = "UNKNOWN";
+        switch (last_valid_mode) {
+            case ControlMode::CADENCE: modeName = "CADENCE"; break;
+            case ControlMode::TORQUE: modeName = "TORQUE"; break;
+            case ControlMode::POWER_CONCENTRIC: modeName = "POWER_CONCENTRIC"; break;
+            case ControlMode::POWER_ECCENTRIC: modeName = "POWER_ECCENTRIC"; break;
+            case ControlMode::LINEAR: modeName = "LINEAR"; break;
+            default: modeName = "UNKNOWN"; break;
+        }
+        sendText("err", modeName);
+    } else {
+        sendText("err", "Aucune trame valide");
+    }*/
+    return last_valid_mode;
 }
+
+
+
+DirectionMode ScreenDisplay::getDirection() {
+    sendCommand("get dir.val");  // Demande la valeur du sens à l'écran Nextion
+
+    const uint8_t RESPONSE_HEADER = 0x71;
+    const uint8_t END_BYTE = 0xFF;
+    const uint32_t TIMEOUT_MS = 100;   // Timeout de 100ms
+
+    int32_t value = -1;
+    bool headerFound = false;
+    uint8_t valBuf[4] = {0};
+    int valIdx = 0;
+    int endCount = 0;
+    uint32_t startTime = HAL_GetTick();
+
+    while (HAL_GetTick() - startTime < TIMEOUT_MS) {
+        if (!(USART2->SR & USART_SR_RXNE)) {
+            continue;
+        }
+
+        uint8_t byte = static_cast<uint8_t>(USART2->DR & 0xFF);
+
+        if (!headerFound) {
+            if (byte == RESPONSE_HEADER) {
+                headerFound = true;
+            }
+            continue;
+        }
+
+        if (valIdx < 4) {
+            valBuf[valIdx++] = byte;
+            if (valIdx == 4) {
+                value = valBuf[0]
+                      | (valBuf[1] << 8)
+                      | (valBuf[2] << 16)
+                      | (valBuf[3] << 24);
+            }
+            continue;
+        }
+
+        if (byte == END_BYTE) {
+            endCount++;
+            if (endCount == 3) {
+                // Réponse complète reçue : maj last_valid_direction global
+                DirectionMode dir = (value == 1) ? DirectionMode::REVERSE : DirectionMode::FORWARD;
+                last_valid_direction = dir;
+                return dir;
+            }
+        } else {
+            endCount = 0;
+        }
+    }
+
+    // Timeout ou erreur : retourne la dernière direction valide globale
+    return last_valid_direction;
+}
+
+
+
 
 float ScreenDisplay::getRampRate()
 {

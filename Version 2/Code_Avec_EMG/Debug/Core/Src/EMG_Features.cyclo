@@ -1,0 +1,5 @@
+../Core/Src/EMG_Features.cpp:16:12:int sign(float)	3
+../Core/Src/EMG_Features.cpp:22:6:void compute_simple_features(const float*, int, EMG_Features*)	7
+../Core/Src/EMG_Features.cpp:47:13:void bit_reverse(Complex*, int)	5
+../Core/Src/EMG_Features.cpp:65:13:void fft_radix2(Complex*, int)	4
+../Core/Src/EMG_Features.cpp:93:6:void compute_fft_features(const float*, int, float, EMG_Features*)	11

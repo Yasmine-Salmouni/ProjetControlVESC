@@ -1,0 +1,13 @@
+../X-CUBE-AI/App/model_lstm_keras.c:2650:9:model_lstm_keras_configure_activations	2
+../X-CUBE-AI/App/model_lstm_keras.c:2855:9:model_lstm_keras_configure_weights	2
+../X-CUBE-AI/App/model_lstm_keras.c:2918:9:ai_model_lstm_keras_get_info	4
+../X-CUBE-AI/App/model_lstm_keras.c:2965:9:ai_model_lstm_keras_get_report	4
+../X-CUBE-AI/App/model_lstm_keras.c:3012:10:ai_model_lstm_keras_get_error	1
+../X-CUBE-AI/App/model_lstm_keras.c:3019:10:ai_model_lstm_keras_create	1
+../X-CUBE-AI/App/model_lstm_keras.c:3030:10:ai_model_lstm_keras_create_and_init	8
+../X-CUBE-AI/App/model_lstm_keras.c:3065:12:ai_model_lstm_keras_inputs_get	2
+../X-CUBE-AI/App/model_lstm_keras.c:3076:12:ai_model_lstm_keras_outputs_get	2
+../X-CUBE-AI/App/model_lstm_keras.c:3087:11:ai_model_lstm_keras_destroy	1
+../X-CUBE-AI/App/model_lstm_keras.c:3094:9:ai_model_lstm_keras_init	2
+../X-CUBE-AI/App/model_lstm_keras.c:3111:8:ai_model_lstm_keras_run	1
+../X-CUBE-AI/App/model_lstm_keras.c:3119:8:ai_model_lstm_keras_forward	1

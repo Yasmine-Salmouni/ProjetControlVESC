@@ -29,7 +29,10 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "../Inc/MotorController.hpp"
+#include "../Inc/ScreenDisplay.hpp"
 #include "../Inc/globals.hpp"
+
+osMutexId_t uartMutex;
 
 /* USER CODE END Includes */
 
@@ -54,7 +57,7 @@ osThreadId_t TaskUpdateSHandle;
 const osThreadAttr_t TaskUpdateS_attributes = {
   .name = "TaskUpdateS",
   .stack_size = 256 * 4,
-  .priority = (osPriority_t) osPriorityRealtime3,
+  .priority = (osPriority_t) osPriorityRealtime5,
 };
 
 osThreadId_t TaskUpdateFromSHandle;
@@ -68,8 +71,10 @@ osThreadId_t LinearControlHandle;
 const osThreadAttr_t LinearControl_attributes = {
   .name = "LinearControl",
   .stack_size = 256 * 4,
-  .priority = (osPriority_t) osPriorityRealtime5,
+  .priority = (osPriority_t) osPriorityRealtime,
 };
+
+/* Attributs */
 /* USER CODE END Variables */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -85,8 +90,12 @@ void StartTaskUpdateS(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    motorController.updateScreen();  // Affiche les données à l'écran
-    osDelay(1);                   // Rafraîchissement toutes les 100 ms
+    // Suppression des affichages debug autour du mutex
+    if (osMutexAcquire(uartMutex, 50) == osOK) {
+      motorController.updateScreen();  // Affiche les données à l'écran
+      osMutexRelease(uartMutex);
+    }
+    osDelay(20);                   // Rafraîchissement toutes les 100 ms
   }
 }
 
@@ -94,26 +103,30 @@ void StartTaskUpdatefromS(void *argument)
 {
     for (;;)
     {
-        motorController.updateFromScreen();  // appel de la méthode
-        osDelay(1);  // met à jour toutes les 20 ms pour une meilleure réactivité
+        // Suppression des affichages debug autour du mutex
+        if (osMutexAcquire(uartMutex, 50) == osOK) {
+            motorController.updateFromScreen();  // appel de la méthode
+            osMutexRelease(uartMutex);
+        }
+        osDelay(20);  // met à jour toutes les 20 ms pour une meilleure réactivité
     }
 }
 
 void StartTaskLinearControl(void *argument)
 {
-
   for(;;)
   {
-	  if (motorController.getControlMode() == ControlMode::LINEAR)
-	  {
-		  float cadence = motorController.getCadence();
-		  motorController.update(cadence);
-	   }
-    osDelay(1);
+    if (motorController.getControlMode() == ControlMode::LINEAR)
+    {
+      float cadence = motorController.getCadence();
+      if (osMutexAcquire(uartMutex, 50) == osOK) {
+        motorController.update(cadence);
+        osMutexRelease(uartMutex);
+      }
+    }
+    osDelay(50);
   }
-
 }
-
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
@@ -128,11 +141,17 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
 
+  // Création du mutex UART
+  const osMutexAttr_t uartMutex_attributes = {
+    .name = "uartMutex"
+  };
+  uartMutex = osMutexNew(&uartMutex_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
 	TaskUpdateSHandle = osThreadNew(StartTaskUpdateS, NULL, &TaskUpdateS_attributes);
 	TaskUpdateFromSHandle= osThreadNew(StartTaskUpdatefromS, NULL, &TaskUpdateFromS_attributes);
 	LinearControlHandle = osThreadNew(StartTaskLinearControl, NULL, &LinearControl_attributes);
+
 
   /* USER CODE END RTOS_THREADS */
 

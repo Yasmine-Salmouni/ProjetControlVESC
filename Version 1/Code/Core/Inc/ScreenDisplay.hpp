@@ -15,6 +15,7 @@
  #include "stm32f4xx_hal.h"
  #include "MotorController.hpp"
  class MotorController;
+ #include "globals.hpp"
 
  /**
   * @brief Classe pour gérer la communication avec un écran Nextion via UART
@@ -46,6 +47,7 @@
      float getUserCadence();
      float getUserPower();
      float getUserTorque();
+     //int32_t getComboBoxValue(const char* objname);
      ControlMode getMode();
      float getUserLinearGain();
      bool getStop();
@@ -59,6 +61,7 @@
      void showAll(float rpm, float torque, float power);
      uint8_t readByte();
 
+
  private:
      UART_HandleTypeDef* ecran_uart;
      bool stopState = false;  // État du bouton stop
@@ -66,9 +69,9 @@
 
      // Méthodes internes d'envoi
      void sendCommand(const char* cmd);
-
+     
+     // Méthode utilitaire pour nettoyer le buffer UART
+     void clearUartBuffer();
 
  };
-
-
 

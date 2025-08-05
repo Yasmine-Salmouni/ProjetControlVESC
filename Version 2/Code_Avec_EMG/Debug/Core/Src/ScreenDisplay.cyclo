@@ -1,0 +1,28 @@
+../Core/Src/ScreenDisplay.cpp:13:2:ScreenDisplay::ScreenDisplay(UART_HandleTypeDef*)	1
+../Core/Src/ScreenDisplay.cpp:15:7:void ScreenDisplay::sendCommand(const char*)	1
+../Core/Src/ScreenDisplay.cpp:21:7:void ScreenDisplay::sendText(const char*, const char*)	1
+../Core/Src/ScreenDisplay.cpp:27:7:void ScreenDisplay::sendValue(const char*, float, const char*)	1
+../Core/Src/ScreenDisplay.cpp:41:7:void ScreenDisplay::showCadence(float)	1
+../Core/Src/ScreenDisplay.cpp:62:7:void ScreenDisplay::showTorque(float)	1
+../Core/Src/ScreenDisplay.cpp:75:7:void ScreenDisplay::showPower(float)	1
+../Core/Src/ScreenDisplay.cpp:87:6:void ScreenDisplay::showAll(float, float, float)	1
+../Core/Src/ScreenDisplay.cpp:104:7:void ScreenDisplay::showMode(ControlMode)	6
+../Core/Src/ScreenDisplay.cpp:119:7:void ScreenDisplay::showGain(float)	1
+../Core/Src/ScreenDisplay.cpp:123:7:void ScreenDisplay::showError(const char*)	1
+../Core/Src/ScreenDisplay.cpp:127:7:void ScreenDisplay::showWelcome()	1
+../Core/Src/ScreenDisplay.cpp:131:7:void ScreenDisplay::clearScreen()	1
+../Core/Src/ScreenDisplay.cpp:135:10:int32_t ScreenDisplay::readInt32()	3
+../Core/Src/ScreenDisplay.cpp:162:10:uint8_t ScreenDisplay::readByte()	2
+../Core/Src/ScreenDisplay.cpp:171:8:float ScreenDisplay::getUserCadence()	8
+../Core/Src/ScreenDisplay.cpp:226:8:float ScreenDisplay::getUserPower()	10
+../Core/Src/ScreenDisplay.cpp:281:8:float ScreenDisplay::getUserTorque()	8
+../Core/Src/ScreenDisplay.cpp:388:7:float ScreenDisplay::getUserLinearGain()	8
+../Core/Src/ScreenDisplay.cpp:429:6:void ScreenDisplay::showDutyCycle(float)	1
+../Core/Src/ScreenDisplay.cpp:437:6:void ScreenDisplay::showDirection(DirectionMode)	2
+../Core/Src/ScreenDisplay.cpp:441:6:bool ScreenDisplay::getStop()	12
+../Core/Src/ScreenDisplay.cpp:505:13:ControlMode ScreenDisplay::getMode()	19
+../Core/Src/ScreenDisplay.cpp:585:15:DirectionMode ScreenDisplay::getDirection()	10
+../Core/Src/ScreenDisplay.cpp:644:7:float ScreenDisplay::getRampRate()	1
+../Core/Src/ScreenDisplay.cpp:652:6:bool ScreenDisplay::getCalibrateRequest()	1
+../Core/Src/ScreenDisplay.cpp:658:6:void ScreenDisplay::showCalibrationStatus(bool)	2
+../Core/Src/ScreenDisplay.cpp:667:7:float ScreenDisplay::getFatigueLabel()	8

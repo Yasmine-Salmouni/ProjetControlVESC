@@ -41,11 +41,13 @@
      MotorController(UART_HandleTypeDef* controlUart, UART_HandleTypeDef* screenUart, float torqueConstant);
 
      void stop();
+     void emergencyStop();
 
      void setTorque(float torque); //réecrire la fonction pour respecter le ramprate
-     void setCadence(float rpm); //réecrire la fonction pour respecter le ramprate
+     void setCadence(float rpm); // rpm mécanique (sera converti en ERPM automatiquement)
+     float getCadence();        // retourne la cadence en RPM mécanique
+     //void setPolePairs(int polePairs); // permet de configurer le nombre de paires de pôles
 
-     float getCadence();
      float getTorque();
      float getDutyCycle();
      float getPower();
@@ -95,12 +97,18 @@
      float lastAppliedCurrent;
      float ramp;
      MotorComputations computations;
+     
+     // Variables pour garder les dernières valeurs valides
+     float lastValidTorque;
+     float lastValidPower;
+     float lastValidCadence;
 
      char rx_buffer[32];  // tampon pour lire les réponses UART
 
      ScreenDisplay* screen;
      VESCInterface* vesc;
 
+     //int polePairs = 8; // Nombre de paires de pôles du moteur (par défaut 8)
 
      float applyDirection(float value);
  };

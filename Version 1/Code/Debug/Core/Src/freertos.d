@@ -44,7 +44,8 @@ Core/Src/freertos.o: ../Core/Src/freertos.cpp \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../Core/Src/../Inc/MotorController.hpp \
- ../Core/Src/../Inc/MotorComputations.hpp ../Core/Src/../Inc/globals.hpp
+ ../Core/Src/../Inc/MotorComputations.hpp \
+ ../Core/Src/../Inc/ScreenDisplay.hpp ../Core/Src/../Inc/globals.hpp
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.hpp:
@@ -92,4 +93,5 @@ Core/Src/freertos.o: ../Core/Src/freertos.cpp \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
 ../Core/Src/../Inc/MotorController.hpp:
 ../Core/Src/../Inc/MotorComputations.hpp:
+../Core/Src/../Inc/ScreenDisplay.hpp:
 ../Core/Src/../Inc/globals.hpp:
